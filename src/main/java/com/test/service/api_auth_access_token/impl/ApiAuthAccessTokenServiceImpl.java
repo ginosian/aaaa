@@ -1,0 +1,109 @@
+package com.test.service.api_auth_access_token.impl;
+
+import com.test.entity.ApiAuthAccessToken;
+import com.test.entity.ApiUser;
+import com.test.misc.TokenType;
+import com.test.repository.ApiAuthAccessTokenRepository;
+import com.test.service.api_auth_access_token.ApiAuthAccessTokenConverter;
+import com.test.service.api_auth_access_token.ApiAuthAccessTokenService;
+import com.test.service.api_auth_access_token.model.ApiAuthAccessTokenCreationRequest;
+import com.test.service.api_auth_access_token.model.ApiAuthAccessTokenRequest;
+import com.test.service.token.TokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
+
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Optional;
+
+import static org.springframework.util.Assert.hasText;
+import static org.springframework.util.Assert.notNull;
+
+@Service
+@PropertySource("classpath:application-security.properties")
+public class ApiAuthAccessTokenServiceImpl implements ApiAuthAccessTokenService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ApiAuthAccessTokenServiceImpl.class);
+
+    @Value("${security.jwt.expiration.seconds:3600}")
+    private int AUTH_ACCESS_TOKEN_EXPIRATION_SECONDS;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private ApiAuthAccessTokenRepository tokenRepository;
+
+    @Override
+    public Optional<ApiAuthAccessToken> findByToken(final String token) {
+        hasText(token, "token can not be null");
+        return Optional.ofNullable(tokenRepository.findByToken(token));
+    }
+
+    @Override
+    public Optional<ApiAuthAccessToken> findByUserDetailId(final String userDetailId) {
+        hasText(userDetailId, "userDetailId can not be null");
+        return Optional.ofNullable(tokenRepository.findByUser(userDetailId));
+    }
+
+    @Override
+    public ApiAuthAccessToken createApiAccessToken(final ApiAuthAccessTokenCreationRequest request) {
+        notNull(request, "request can not be null");
+        final ApiUser apiUser = request.getApiUser();
+        final TokenType tokenType = request.getTokenType();
+        notNull(apiUser, "request.apiUser can not be null");
+        notNull(tokenType, "request.tokenType can not be null");
+
+        final String userId = apiUser.getId();
+        logger.debug("Creating apiAuthAccessToken for user:'{}'...", userId);
+        final Date expires = createExpirationDate(new Date().getTime());
+        request.setExpires(expires);
+        final String token = tokenService.create(request);
+
+        final ApiAuthAccessToken apiAuthAccessToken = tokenRepository.save(ApiAuthAccessTokenConverter.convert(request, token));
+        logger.trace("ApiAuthAccessToken:'{}' is created for user:'{}'.", apiAuthAccessToken.getToken(), userId);
+        return apiAuthAccessToken;
+    }
+
+    @Override
+    public ApiAuthAccessToken refreshApiAccessToken(final ApiAuthAccessTokenRequest request) {
+        notNull(request, "request can not be null");
+        final ApiAuthAccessToken token  = request.getToken();
+        notNull(token, "request.token can not be null");
+
+        logger.debug("Refreshing token for user:'{}'...", token.getApiUser().getId());
+        token.setExpires(createExpirationDate(new Date().getTime()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        token.setActive(true);
+        logger.trace("ApiAuthAccessToken:'{}' is refreshed for user:'{}'.", token.getToken(), token.getApiUser().getId());
+        return tokenRepository.save(token);
+    }
+
+    @Override
+    public void inactivateApiAccessToken(final ApiAuthAccessTokenRequest request) {
+        notNull(request, "request can not be null");
+        final ApiAuthAccessToken apiAuthAccessToken  = request.getToken();
+        notNull(apiAuthAccessToken, "request.apiAuthAccessToken can not be null");
+
+        apiAuthAccessToken.setActive(false);
+        tokenRepository.save(apiAuthAccessToken);
+    }
+
+    @Override
+    public void deleteApiAccessToken(ApiAuthAccessTokenRequest request) {
+        notNull(request, "request can not be null");
+        final ApiAuthAccessToken apiAuthAccessToken  = request.getToken();
+        notNull(apiAuthAccessToken, "request.apiAuthAccessToken can not be null");
+
+        apiAuthAccessToken.setActive(false);
+        apiAuthAccessToken.setDeleted(true);
+        tokenRepository.save(apiAuthAccessToken);
+    }
+
+    private Date createExpirationDate(final long time){
+        return new Date(1000L * AUTH_ACCESS_TOKEN_EXPIRATION_SECONDS + time);
+    }
+}
