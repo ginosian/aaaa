@@ -1,9 +1,10 @@
 package com.test.rest.config;
 
-import com.attendance_tracker.rest.endpoint.impl.InfoEndpointImpl;
-import com.attendance_tracker.rest.endpoint.impl.OwnerEndpointImpl;
+import com.test.rest.endpoint.impl.AuthEndpointImpl;
+import com.test.rest.endpoint.impl.InfoEndpointImpl;
+import com.test.rest.endpoint.impl.ManagerEndpointImpl;
+import com.test.rest.endpoint.impl.WaiterEndpointImpl;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.message.GZipEncoder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.EncodingFilter;
@@ -24,13 +25,14 @@ public class JerseyConfig extends ResourceConfig{
     }
 
     private void configEndpoints(){
-        this.register(MultiPartFeature.class);
         this.register(JacksonJsonProvider.class);
         this.property("jersey.config.beanValidation.enableOutputValidationErrorEntity.server", false);
         this.property("jersey.config.disableAutoDiscovery", true);
         EncodingFilter.enableFor(this, GZipEncoder.class);
         // Endpoints
         register(InfoEndpointImpl.class);
-        register(OwnerEndpointImpl.class);
+        register(AuthEndpointImpl.class);
+        register(ManagerEndpointImpl.class);
+        register(WaiterEndpointImpl.class);
     }
 }

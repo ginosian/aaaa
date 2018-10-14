@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ApiAuthAccessTokenRepository extends JpaRepository<ApiAuthAccessToken, String> {
 
     @Query("SELECT t FROM ApiAuthAccessToken t WHERE t.apiUser.id = (:userId)")
-    ApiAuthAccessToken findByUser(@Param("userDetailId") String userDetailId);
+    ApiAuthAccessToken findByUser(@Param("userId") String userId);
 
     @Query("SELECT t FROM ApiAuthAccessToken t WHERE t.token = (:token)")
     ApiAuthAccessToken findByToken(@Param("token") String token);

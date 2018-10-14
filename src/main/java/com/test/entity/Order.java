@@ -20,7 +20,7 @@ public class Order extends AbstractEntity{
     @JoinColumn(foreignKey = @ForeignKey(name = "restaurant_table_fk"))
     private RestaurantTable restaurantTable;
 
-    @OneToMany(mappedBy = "productsInOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductInOrder> productsInOrder;
 
     @Column(name = "order_status", nullable = false, unique = true)

@@ -15,7 +15,7 @@ import com.test.service.OrderCreationRequest;
 import com.test.service.OrderUpdateRequest;
 import com.test.service.ProductInOrderUpdateRequest;
 import com.test.service.waiter.WaiterService;
-import jdk.internal.joptsimple.internal.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,7 +103,7 @@ public class WaiterServiceImpl implements WaiterService{
         productInOrderUpdateRequests.forEach(productInOrderUpdateRequest -> {
             final String productInOrderId = productInOrderUpdateRequest.getProductInOrderId();
             final String productId = productInOrderUpdateRequest.getProductId();
-            if(Strings.isNullOrEmpty(productInOrderId)){
+            if(StringUtils.isEmpty(productInOrderId)){
                 newProducts.add(createProductInOrder(productId, productInOrderUpdateRequest.getAmount()));
             } else {
                 productUpdates.put(productInOrderId, productInOrderUpdateRequest.getAmount());

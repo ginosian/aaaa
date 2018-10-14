@@ -1,7 +1,7 @@
 package com.test.rest.endpoint.impl;
 
-import com.attendance_tracker.rest.endpoint.InfoEndpoint;
-import com.attendance_tracker.rest.endpoint.dto.InfoDto;
+import com.test.rest.endpoint.InfoEndpoint;
+import com.test.rest.endpoint.dto.InfoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

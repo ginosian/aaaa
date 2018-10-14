@@ -12,9 +12,9 @@ public class StaticData {
 
     public static List<Role> createRoles() {
         final Role roleCompanyAdmin = new Role();
-        roleCompanyAdmin.setType(RoleType.MANAGER);
+        roleCompanyAdmin.setType(RoleType.ROLE_MANAGER);
         final Role roleEmployee = new Role();
-        roleEmployee.setType(RoleType.WAITER);
+        roleEmployee.setType(RoleType.ROLE_WAITER);
         return Lists.newArrayList(roleCompanyAdmin, roleEmployee);
     }
 

@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import static org.springframework.util.Assert.*;
 
 @Component
-@PropertySource("classpath:application-com.test.security.properties")
+@PropertySource("classpath:application-security.properties")
 public class JwtTokenComponent {
 
     private final static Logger logger = LoggerFactory.getLogger(JwtTokenComponent.class);

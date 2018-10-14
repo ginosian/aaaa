@@ -16,6 +16,7 @@ import com.test.service.user.ApiUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationFacadeImpl.class);
 
     @Autowired
+    @Qualifier("api-user-service")
     private ApiUserService apiUserDetailService;
 
     @Autowired

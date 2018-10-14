@@ -23,7 +23,7 @@ public class APIAuthenticationResponse implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return authenticationResponse.getApiUserDetail().getUsername();
+        return authenticationResponse.getApiUser().getUsername();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class APIAuthenticationResponse implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return authenticationResponse.getApiUserDetail();
+        return authenticationResponse.getApiUser();
     }
 
     @Override
@@ -47,6 +47,6 @@ public class APIAuthenticationResponse implements Authentication {
 
     @Override
     public String getName() {
-        return authenticationResponse.getApiUserDetail().getUsername();
+        return authenticationResponse.getApiUser().getUsername();
     }
 }

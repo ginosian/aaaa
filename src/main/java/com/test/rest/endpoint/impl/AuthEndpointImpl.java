@@ -1,6 +1,7 @@
 package com.test.rest.endpoint.impl;
 
-import com.attendance_tracker.rest.endpoint.AuthEndpoint;
+
+import com.test.rest.endpoint.AuthEndpoint;
 
 public class AuthEndpointImpl implements AuthEndpoint {
 
