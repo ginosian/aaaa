@@ -50,7 +50,6 @@ public class ManagerServiceImpl implements ManagerService {
         return productRepository.save(product);
     }
 
-
     @Transactional
     @Override
     public RestaurantTable assignTableToWaiter(String tableId, String waiterId) {
