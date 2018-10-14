@@ -14,6 +14,9 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class RestaurantTable extends AbstractEntity{
 
+    @Column(name = "name", nullable = false, unique = true)
+    private String name;
+
     @ManyToOne(optional = false)
     @JoinColumn(foreignKey = @ForeignKey(name = "restaurant_table_api_user_fk"))
     private ApiUser waiter;

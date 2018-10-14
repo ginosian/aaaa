@@ -1,5 +1,6 @@
 package com.test.service.waiter;
 
+import com.test.entity.Order;
 import com.test.entity.RestaurantTable;
 import com.test.service.OrderCreationRequest;
 import com.test.service.OrderUpdateRequest;
@@ -10,7 +11,7 @@ public interface WaiterService {
 
     List<RestaurantTable> getTables(String waiterId);
 
-    void createOrder(OrderCreationRequest orderCreationRequest);
+    Order createOrder(OrderCreationRequest orderCreationRequest);
 
-    void updateOrder(OrderUpdateRequest orderUpdateRequest);
+    Order updateOrder(OrderUpdateRequest orderUpdateRequest);
 }
